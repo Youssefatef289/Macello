@@ -13,6 +13,8 @@ export function Header() {
   const location = useLocation()
   const isHome = location.pathname === '/'
   const isHomeTransparent = isHome && !isScrolled
+  const logoSrc = `${import.meta.env.BASE_URL}img/${isHomeTransparent ? 'logo-white.png' : 'logo-black.png'}`
+  const logoFallback = `${import.meta.env.BASE_URL}img/logo.png`
 
   useEffect(() => {
     if (!isHome) {
@@ -40,11 +42,15 @@ export function Header() {
           aria-label="ماتشيللو — الصفحة الرئيسية"
         >
           <img
-            src={isHomeTransparent ? '/img/logo_-_white-removebg-preview.png' : '/img/logo - black.png'}
+            src={logoSrc}
             alt="ماتشيللو"
             className="h-20 w-60 max-w-[300px] object-cover"
             width={200}
             height={100}
+            onError={(e) => {
+              e.currentTarget.onerror = null
+              e.currentTarget.src = logoFallback
+            }}
           />
         </Link>
 

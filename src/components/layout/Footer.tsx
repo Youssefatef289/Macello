@@ -8,7 +8,7 @@ export function Footer() {
         <div>
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <img
-              src="./img/logo - black.png"
+              src="/img/logo-black.png"
               alt="ماتشيللو"
               className="h-20 w-100 max-w-[300px] object-cover "
               width={300}

@@ -6,9 +6,10 @@ import { useState } from 'react'
 import { locationHref, phoneDisplay, phoneHref, whatsappHref } from '../data/site'
 import { useCart } from '../context/CartContext'
 import { ProductCard } from '../components/products/ProductCard'
+import { RevealOnScroll } from '../components/animation/RevealOnScroll'
 
 export function HomePage() {
-  const { addToCart } = useCart()
+  const { addToCart, openCart } = useCart()
   const [weights, setWeights] = useState<Record<string, number>>(() =>
     Object.fromEntries(featuredProducts.map((p) => [p.id, 0.5])),
   )
@@ -91,17 +92,16 @@ export function HomePage() {
                 text: 'سيارات مجهزة للحفاظ على الجودة',
                 fill: true,
               },
-            ].map((f) => (
-              <div
-                key={f.title}
-                className="group rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6 text-right transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white transition-transform group-hover:scale-110">
-                  <Icon name={f.icon} filled={f.fill} />
+            ].map((f, index) => (
+              <RevealOnScroll key={f.title} delayMs={index * 90}>
+                <div className="group rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6 text-right transition-all duration-300 hover:-translate-y-1">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white transition-transform group-hover:scale-110">
+                    <Icon name={f.icon} filled={f.fill} />
+                  </div>
+                  <h3 className="mb-2 text-xl font-bold text-zinc-900">{f.title}</h3>
+                  <p className="text-zinc-600">{f.text}</p>
                 </div>
-                <h3 className="mb-2 text-xl font-bold text-zinc-900">{f.title}</h3>
-                <p className="text-zinc-600">{f.text}</p>
-              </div>
+              </RevealOnScroll>
             ))}
           </div>
         </div>
@@ -139,6 +139,8 @@ export function HomePage() {
             <img
               src="/img/home/home-1.jpeg"
               alt="من نحن"
+              loading="lazy"
+              decoding="async"
               className="h-[360px] w-full rounded-2xl object-cover"
             />
           </div>
@@ -161,25 +163,29 @@ export function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredProducts.map((p) => {
+          {featuredProducts.map((p, index) => {
             const w = weights[p.id] ?? 0.5
             return (
-              <ProductCard
-                key={p.id}
-                product={p}
-                kg={w}
-                onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
-                onAdd={() =>
-                  addToCart({
-                    productId: p.id,
-                    name: p.name,
-                    image: p.image,
-                    imageAlt: p.imageAlt,
-                    weightKg: w,
-                    pricePerKg: p.pricePerKg,
-                  })
-                }
-              />
+              <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+                <ProductCard
+                  product={p}
+                  kg={w}
+                  onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
+                  onAdd={() =>
+                    {
+                      addToCart({
+                        productId: p.id,
+                        name: p.name,
+                        image: p.image,
+                        imageAlt: p.imageAlt,
+                        weightKg: w,
+                        pricePerKg: p.pricePerKg,
+                      })
+                      openCart()
+                    }
+                  }
+                />
+              </RevealOnScroll>
             )
           })}
         </div>
@@ -201,27 +207,31 @@ export function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {poultry.map((p) => {
+          {poultry.map((p, index) => {
             const w = poultryWeights[p.id] ?? 0.5
             return (
-              <ProductCard
-                key={p.id}
-                product={p}
-                kg={w}
-                onKgChange={(kg) =>
-                  setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
-                }
-                onAdd={() =>
-                  addToCart({
-                    productId: p.id,
-                    name: p.name,
-                    image: p.image,
-                    imageAlt: p.imageAlt,
-                    weightKg: w,
-                    pricePerKg: p.pricePerKg,
-                  })
-                }
-              />
+              <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+                <ProductCard
+                  product={p}
+                  kg={w}
+                  onKgChange={(kg) =>
+                    setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
+                  }
+                  onAdd={() =>
+                    {
+                      addToCart({
+                        productId: p.id,
+                        name: p.name,
+                        image: p.image,
+                        imageAlt: p.imageAlt,
+                        weightKg: w,
+                        pricePerKg: p.pricePerKg,
+                      })
+                      openCart()
+                    }
+                  }
+                />
+              </RevealOnScroll>
             )
           })}
         </div>
@@ -233,21 +243,21 @@ export function HomePage() {
           <p className="text-zinc-500">صور مختارة من منتجاتنا وتجهيزاتنا اليومية</p>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <img
-            src="/img/home/home-1.jpeg"
-            alt="تجهيز لحوم ماتشيللو"
-            className="h-72 w-full rounded-2xl object-cover transition-transform duration-500 hover:scale-[1.02]"
-          />
-          <img
-            src="/img/home/home-2.jpeg"
-            alt="منتجات ماتشيللو"
-            className="h-72 w-full rounded-2xl object-cover transition-transform duration-500 hover:scale-[1.02]"
-          />
-          <img
-            src="/img/home/home-3.jpeg"
-            alt="تشكيلة لحوم طازجة"
-            className="h-72 w-full rounded-2xl object-cover transition-transform duration-500 hover:scale-[1.02]"
-          />
+          {[
+            { src: '/img/home/home-1.jpeg', alt: 'تجهيز لحوم ماتشيللو' },
+            { src: '/img/home/home-2.jpeg', alt: 'منتجات ماتشيللو' },
+            { src: '/img/home/home-3.jpeg', alt: 'تشكيلة لحوم طازجة' },
+          ].map((img, index) => (
+            <RevealOnScroll key={img.src} delayMs={index * 90} y={20}>
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                decoding="async"
+                className="h-72 w-full rounded-2xl object-cover transition-transform duration-500 hover:scale-[1.02]"
+              />
+            </RevealOnScroll>
+          ))}
         </div>
       </section>
 
@@ -279,15 +289,14 @@ export function HomePage() {
                 text: 'تسعير واضح وتنوع يناسب كل الاحتياجات.',
                 icon: 'savings',
               },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-zinc-200 bg-white p-6 text-right transition-colors hover:border-primary/40"
-              >
-                <Icon name={item.icon} className="mb-3 text-3xl text-primary" />
-                <h3 className="mb-2 text-xl font-bold text-zinc-900">{item.title}</h3>
-                <p className="text-sm text-zinc-600">{item.text}</p>
-              </div>
+            ].map((item, index) => (
+              <RevealOnScroll key={item.title} delayMs={index * 80} y={20}>
+                <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-right transition-colors hover:border-primary/40">
+                  <Icon name={item.icon} className="mb-3 text-3xl text-primary" />
+                  <h3 className="mb-2 text-xl font-bold text-zinc-900">{item.title}</h3>
+                  <p className="text-sm text-zinc-600">{item.text}</p>
+                </div>
+              </RevealOnScroll>
             ))}
           </div>
         </div>

@@ -3,9 +3,10 @@ import { catalogProducts } from '../data/products'
 import { Icon } from '../components/ui/Icon'
 import { useCart } from '../context/CartContext'
 import { ProductCard } from '../components/products/ProductCard'
+import { RevealOnScroll } from '../components/animation/RevealOnScroll'
 
 export function ProductsPage() {
-  const { addToCart } = useCart()
+  const { addToCart, openCart } = useCart()
   const [tab, setTab] = useState<'all' | 'meat' | 'poultry'>(() => 'all')
   const [selectedWeight, setSelectedWeight] = useState<Record<string, number>>(
     () => Object.fromEntries(catalogProducts.map((p) => [p.id, 0.5])),
@@ -98,28 +99,32 @@ export function ProductsPage() {
 
         <div className="min-w-0">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {filteredProducts.map((p) => {
+            {filteredProducts.map((p, index) => {
               const kg = selectedWeight[p.id] ?? 0.5
               return (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  kg={kg}
-                  onKgChange={(w) =>
-                    setSelectedWeight((prev) => ({ ...prev, [p.id]: w }))
-                  }
-                  onAdd={() =>
-                    addToCart({
-                      productId: p.id,
-                      name: p.name,
-                      image: p.image,
-                      imageAlt: p.imageAlt,
-                      weightKg: kg,
-                      pricePerKg: p.pricePerKg,
-                    })
-                  }
-                  className="p-3 sm:p-3"
-                />
+                <RevealOnScroll key={p.id} delayMs={Math.min(index * 45, 280)} y={18}>
+                  <ProductCard
+                    product={p}
+                    kg={kg}
+                    onKgChange={(w) =>
+                      setSelectedWeight((prev) => ({ ...prev, [p.id]: w }))
+                    }
+                    onAdd={() =>
+                    {
+                      addToCart({
+                        productId: p.id,
+                        name: p.name,
+                        image: p.image,
+                        imageAlt: p.imageAlt,
+                        weightKg: kg,
+                        pricePerKg: p.pricePerKg,
+                      })
+                      openCart()
+                    }
+                    }
+                    className="p-3 sm:p-3"
+                  />
+                </RevealOnScroll>
               )
             })}
           </div>
@@ -128,14 +133,16 @@ export function ProductsPage() {
 
       <section className="border-y border-zinc-200 bg-zinc-50 py-16">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 text-center md:grid-cols-3">
-          {trust.map((x) => (
-            <div key={x.t} className="flex flex-col items-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-on-background text-white">
-                <Icon name={x.icon} />
+          {trust.map((x, index) => (
+            <RevealOnScroll key={x.t} delayMs={index * 80} y={20}>
+              <div className="flex flex-col items-center">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-on-background text-white">
+                  <Icon name={x.icon} />
+                </div>
+                <h4 className="mb-2 text-sm font-semibold text-on-background">{x.t}</h4>
+                <p className="text-xs text-secondary">{x.d}</p>
               </div>
-              <h4 className="mb-2 text-sm font-semibold text-on-background">{x.t}</h4>
-              <p className="text-xs text-secondary">{x.d}</p>
-            </div>
+            </RevealOnScroll>
           ))}
         </div>
       </section>

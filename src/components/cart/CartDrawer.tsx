@@ -71,8 +71,7 @@ export function CartDrawer() {
         type="button"
         onClick={closeCart}
         className={[
-          'absolute inset-0 z-0 bg-zinc-950/45 backdrop-blur-[2px] transition-opacity duration-300',
-          isCartOpen ? 'opacity-100' : 'opacity-0',
+          'absolute inset-0 z-0 bg-zinc-950/45 backdrop-blur-[2px] animate-[fadeIn_.28s_ease-out_forwards]',
         ].join(' ')}
         aria-label="إغلاق السلة"
         tabIndex={isCartOpen ? 0 : -1}
@@ -80,8 +79,8 @@ export function CartDrawer() {
 
       <aside
         className={[
-          'absolute inset-y-0 right-0 z-10 flex h-dvh w-[min(100vw,28rem)] max-w-none flex-col overflow-hidden border-l border-white/40 bg-white/95 shadow-2xl shadow-black/30 backdrop-blur-xl',
-          'translate-x-0',
+          'absolute inset-y-0 left-0 z-10 flex h-dvh w-[min(100vw,28rem)] max-w-none flex-col overflow-hidden border-r border-white/40 bg-white/95 shadow-2xl shadow-black/30 backdrop-blur-xl',
+          'animate-[slideInFromLeft_.34s_cubic-bezier(.22,1,.36,1)_forwards]',
         ].join(' ')}
         role="dialog"
         aria-modal="true"

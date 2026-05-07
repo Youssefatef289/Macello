@@ -38,6 +38,8 @@ export function ProductCard({ product, kg, onKgChange, onAdd, className }: Props
         <img
           src={product.image}
           alt={product.imageAlt}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
       </div>
@@ -56,7 +58,7 @@ export function ProductCard({ product, kg, onKgChange, onAdd, className }: Props
         <button
           type="button"
           onClick={onAdd}
-          className="flex h-11 w-11 items-center justify-center rounded-2xl  text-black shadow-black/10 transition-transform hover:scale-105"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-black ring-1 ring-zinc-200 shadow-black/10 transition-transform hover:scale-105"
           aria-label="أضف للسلة"
           title="أضف للسلة"
         >

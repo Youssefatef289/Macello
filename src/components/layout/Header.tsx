@@ -130,7 +130,10 @@ export function Header() {
           </a>
           <button
             type="button"
-            className="p-2 md:hidden"
+            className={[
+              'p-2 md:hidden',
+              isHomeTransparent ? 'text-white' : 'text-zinc-800',
+            ].join(' ')}
             aria-label="القائمة"
             onClick={() => setMenuOpen((o) => !o)}
           >

@@ -162,7 +162,7 @@ export function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
           {featuredProducts.map((p, index) => {
             const w = weights[p.id] ?? 0.5
             return (
@@ -170,6 +170,7 @@ export function HomePage() {
                 <ProductCard
                   product={p}
                   kg={w}
+                  compactOnMobile
                   onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
                   onAdd={() =>
                     {
@@ -206,7 +207,7 @@ export function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
           {poultry.map((p, index) => {
             const w = poultryWeights[p.id] ?? 0.5
             return (
@@ -214,6 +215,7 @@ export function HomePage() {
                 <ProductCard
                   product={p}
                   kg={w}
+                  compactOnMobile
                   onKgChange={(kg) =>
                     setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
                   }

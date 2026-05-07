@@ -16,15 +16,24 @@ type Props = {
   onKgChange: (kg: number) => void
   onAdd: () => void
   className?: string
+  compactOnMobile?: boolean
 }
 
-export function ProductCard({ product, kg, onKgChange, onAdd, className }: Props) {
+export function ProductCard({
+  product,
+  kg,
+  onKgChange,
+  onAdd,
+  className,
+  compactOnMobile = false,
+}: Props) {
   const linePrice = Math.round(product.pricePerKg * kg)
 
   return (
     <article
       className={[
-        'group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white p-3 transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 sm:p-4',
+        'group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300',
+        compactOnMobile ? 'p-2.5 sm:p-4' : 'p-3 sm:p-4',
         className ?? '',
       ].join(' ')}
     >
@@ -67,24 +76,47 @@ export function ProductCard({ product, kg, onKgChange, onAdd, className }: Props
       </div>
 
       <div className="mt-5 text-right">
-        <h3 className="mb-1 truncate text-base font-bold text-zinc-900">
+        <h3
+          className={[
+            'mb-1 truncate font-bold text-zinc-900',
+            compactOnMobile ? 'text-sm sm:text-base' : 'text-base',
+          ].join(' ')}
+        >
           {product.name}
         </h3>
-        <p className="mb-3 truncate text-xs text-secondary">{product.description}</p>
+        <p
+          className={[
+            'mb-3 truncate text-secondary',
+            compactOnMobile ? 'text-[11px] sm:text-xs' : 'text-xs',
+          ].join(' ')}
+        >
+          {product.description}
+        </p>
 
-        <div className="mb-3 text-xl font-semibold text-primary">
+        <div
+          className={[
+            'mb-3 font-semibold text-primary',
+            compactOnMobile ? 'text-lg sm:text-xl' : 'text-xl',
+          ].join(' ')}
+        >
           {formatEgp(linePrice)}{' '}
           <span className="text-sm font-normal text-on-background">/ تقدير</span>
         </div>
 
-        <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
+        <div
+          className={[
+            'mb-4 flex flex-wrap items-center justify-end',
+            compactOnMobile ? 'gap-1.5 sm:gap-2' : 'gap-2',
+          ].join(' ')}
+        >
           {weightOptionsKg.map((w) => (
             <button
               key={w}
               type="button"
               onClick={() => onKgChange(w)}
               className={[
-                'rounded-full border px-3 py-1 text-[11px] font-semibold transition',
+                'rounded-full border font-semibold transition',
+                compactOnMobile ? 'px-2.5 py-1 text-[10px] sm:px-3 sm:text-[11px]' : 'px-3 py-1 text-[11px]',
                 kg === w
                   ? 'border-primary bg-primary text-white'
                   : 'border-zinc-200 bg-white text-zinc-700 hover:border-primary hover:text-primary',

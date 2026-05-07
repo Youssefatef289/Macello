@@ -1,21 +1,20 @@
 import { Link } from 'react-router-dom'
-import { featuredProducts, formatEgp, heroImage, weightOptionsKg } from '../data/products'
-import { useCart } from '../context/CartContext'
+import { featuredProducts, heroImage, poultryProducts } from '../data/products'
 import { Icon } from '../components/ui/Icon'
 import { WhatsAppIcon } from '../components/ui/WhatsAppIcon'
 import { useState } from 'react'
 import { locationHref, phoneDisplay, phoneHref, whatsappHref } from '../data/site'
-
-function weightLabel(kg: number) {
-  if (kg === 0.25) return '١/٤ كجم'
-  if (kg === 0.5) return '١/٢ كجم'
-  return '١ كجم'
-}
+import { useCart } from '../context/CartContext'
+import { ProductCard } from '../components/products/ProductCard'
 
 export function HomePage() {
-  const { addProduct } = useCart()
+  const { addToCart } = useCart()
   const [weights, setWeights] = useState<Record<string, number>>(() =>
     Object.fromEntries(featuredProducts.map((p) => [p.id, 0.5])),
+  )
+  const poultry = poultryProducts.slice(0, 4)
+  const [poultryWeights, setPoultryWeights] = useState<Record<string, number>>(() =>
+    Object.fromEntries(poultry.map((p) => [p.id, 0.5])),
   )
 
   return (
@@ -70,9 +69,9 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="bg-white py-14">
+      <section className="bg-white py-16">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {[
               {
                 icon: 'schedule' as const,
@@ -95,7 +94,7 @@ export function HomePage() {
             ].map((f) => (
               <div
                 key={f.title}
-                className="group rounded-2xl border border-zinc-200 bg-zinc-50 p-6 text-right transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                className="group rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6 text-right transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white transition-transform group-hover:scale-110">
                   <Icon name={f.icon} filled={f.fill} />
@@ -109,10 +108,48 @@ export function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid items-center gap-8 lg:grid-cols-2">
+          <div className="order-2 text-right lg:order-1">
+            <span className="mb-3 inline-block rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-primary">
+              من نحن
+            </span>
+            <h2 className="mb-4 text-3xl font-black text-zinc-900 md:text-4xl">
+              خبرة وجودة في كل قطعة لحم
+            </h2>
+            <p className="mb-6 leading-8 text-zinc-600">
+              ماتشيللو جزارة عصرية تجمع بين الخبرة التقليدية والتجهيز الحديث.
+              نختار أفضل اللحوم يوميًا ونوفرها بتقطيع احترافي وتغليف آمن مع سرعة
+              توصيل عالية لخدمة الأسر والمطاعم.
+            </p>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {[
+                { icon: 'verified', text: 'جودة مضمونة برقابة مستمرة' },
+                { icon: 'bolt', text: 'تنفيذ الطلبات بسرعة وكفاءة' },
+                { icon: 'support_agent', text: 'فريق دعم متاح للمتابعة' },
+                { icon: 'sell', text: 'أسعار عادلة وخيارات متعددة' },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center justify-end gap-2 rounded-xl border border-zinc-200 p-3 text-sm">
+                  <span>{item.text}</span>
+                  <Icon name={item.icon} className="text-primary" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="order-1 lg:order-2">
+            <img
+              src="/img/home/home-1.jpeg"
+              alt="من نحن"
+              className="h-[360px] w-full rounded-2xl object-cover"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="mb-10 flex items-end justify-between gap-4 text-right">
           <div>
-            <h2 className="mb-2 text-3xl font-black text-zinc-900">أفضل المنتجات اليوم</h2>
-            <p className="text-zinc-500">منتجات مختارة مع تسعير واضح حسب الوزن</p>
+            <h2 className="mb-2 text-3xl font-black text-zinc-900">اللحوم الطازجة</h2>
+            <p className="text-zinc-500">اختيارات يومية من اللحوم مع تسعير واضح حسب الوزن</p>
           </div>
           <Link
             to="/products"
@@ -126,69 +163,65 @@ export function HomePage() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredProducts.map((p) => {
             const w = weights[p.id] ?? 0.5
-            const linePrice = Math.round(w * p.pricePerKg)
             return (
-              <article
+              <ProductCard
                 key={p.id}
-                className="group overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={p.image}
-                    alt={p.imageAlt}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                </div>
-                <div className="p-5 text-center">
-                  <h4 className="mb-3 text-xl font-bold text-zinc-900">{p.name}</h4>
-                  <div className="mb-4 flex flex-wrap justify-center gap-2">
-                    {weightOptionsKg.map((kg) => (
-                      <button
-                        key={kg}
-                        type="button"
-                        onClick={() => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
-                        className={
-                          w === kg
-                            ? 'rounded-full bg-primary px-3 py-1 text-xs font-bold text-white'
-                            : 'rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold transition-colors hover:border-primary'
-                        }
-                      >
-                        {weightLabel(kg)}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="mb-4 text-2xl font-black text-primary">{formatEgp(linePrice)}</div>
-                  <div className="flex items-center justify-center gap-3">
-                    <a
-                      href={whatsappHref}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition-transform hover:scale-105"
-                      aria-label="اطلب عبر واتساب"
-                    >
-                      <WhatsAppIcon className="h-5 w-5" />
-                    </a>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        addProduct({
-                          productId: p.id,
-                          name: p.name,
-                          image: p.image,
-                          imageAlt: p.imageAlt,
-                          weightKg: w,
-                          pricePerKg: p.pricePerKg,
-                        })
-                      }
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white transition-transform hover:scale-105"
-                      aria-label="أضف للسلة"
-                    >
-                      <Icon name="add_shopping_cart" />
-                    </button>
-                  </div>
-                </div>
-              </article>
+                product={p}
+                kg={w}
+                onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
+                onAdd={() =>
+                  addToCart({
+                    productId: p.id,
+                    name: p.name,
+                    image: p.image,
+                    imageAlt: p.imageAlt,
+                    weightKg: w,
+                    pricePerKg: p.pricePerKg,
+                  })
+                }
+              />
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-16">
+        <div className="mb-10 flex items-end justify-between gap-4 text-right">
+          <div>
+            <h2 className="mb-2 text-3xl font-black text-zinc-900">الدواجن الطازجة</h2>
+            <p className="text-zinc-500">اختيارات يومية من الدواجن مع تسعير واضح حسب الوزن</p>
+          </div>
+          <Link
+            to="/products"
+            className="flex items-center gap-2 text-sm font-bold text-primary transition-all hover:gap-4"
+          >
+            عرض المزيد
+            <Icon name="chevron_left" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {poultry.map((p) => {
+            const w = poultryWeights[p.id] ?? 0.5
+            return (
+              <ProductCard
+                key={p.id}
+                product={p}
+                kg={w}
+                onKgChange={(kg) =>
+                  setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
+                }
+                onAdd={() =>
+                  addToCart({
+                    productId: p.id,
+                    name: p.name,
+                    image: p.image,
+                    imageAlt: p.imageAlt,
+                    weightKg: w,
+                    pricePerKg: p.pricePerKg,
+                  })
+                }
+              />
             )
           })}
         </div>
@@ -218,29 +251,42 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="bg-zinc-950 py-16 text-white">
+      <section className="bg-zinc-50 py-16">
         <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-10 text-center">
+            <h2 className="mb-2 text-3xl font-black text-zinc-900">لماذا تختارنا</h2>
+            <p className="text-zinc-500">مزايا حقيقية تجعل تجربة الشراء أسهل وأضمن</p>
+          </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
                 title: 'خبرة تقطيع احترافية',
                 text: 'فريق متخصص يجهز كل قطعة حسب طلبك بدقة عالية.',
+                icon: 'content_cut',
               },
               {
                 title: 'رقابة بيطرية مستمرة',
                 text: 'فحص يومي لكل الذبائح لضمان السلامة والجودة.',
+                icon: 'health_and_safety',
               },
               {
                 title: 'خدمة عملاء سريعة',
                 text: 'متواجدون دائمًا للرد على الاستفسارات وتعديل الطلبات.',
+                icon: 'headset_mic',
+              },
+              {
+                title: 'أسعار مناسبة',
+                text: 'تسعير واضح وتنوع يناسب كل الاحتياجات.',
+                icon: 'savings',
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-white/10 bg-white/5 p-6 text-right transition-colors hover:bg-white/10"
+                className="rounded-2xl border border-zinc-200 bg-white p-6 text-right transition-colors hover:border-primary/40"
               >
-                <h3 className="mb-3 text-xl font-bold">{item.title}</h3>
-                <p className="text-sm text-zinc-300">{item.text}</p>
+                <Icon name={item.icon} className="mb-3 text-3xl text-primary" />
+                <h3 className="mb-2 text-xl font-bold text-zinc-900">{item.title}</h3>
+                <p className="text-sm text-zinc-600">{item.text}</p>
               </div>
             ))}
           </div>

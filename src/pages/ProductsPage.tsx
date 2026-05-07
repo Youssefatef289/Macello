@@ -1,26 +1,21 @@
 import { useMemo, useState } from 'react'
-import {
-  catalogProducts,
-  formatEgp,
-  weightOptionsKg,
-  type CatalogProduct,
-} from '../data/products'
-import { useCart } from '../context/CartContext'
+import { catalogProducts } from '../data/products'
 import { Icon } from '../components/ui/Icon'
-import { WhatsAppIcon } from '../components/ui/WhatsAppIcon'
-import { whatsappHref } from '../data/site'
-
-function weightLabel(kg: number) {
-  if (kg === 0.25) return '١/٤ كيلو'
-  if (kg === 0.5) return '١/٢ كيلو'
-  return '١ كيلو'
-}
+import { useCart } from '../context/CartContext'
+import { ProductCard } from '../components/products/ProductCard'
 
 export function ProductsPage() {
-  const { addProduct } = useCart()
+  const { addToCart } = useCart()
+  const [tab, setTab] = useState<'all' | 'meat' | 'poultry'>(() => 'all')
   const [selectedWeight, setSelectedWeight] = useState<Record<string, number>>(
     () => Object.fromEntries(catalogProducts.map((p) => [p.id, 0.5])),
   )
+
+  const filteredProducts = useMemo(() => {
+    if (tab === 'poultry') return catalogProducts.filter((p) => p.category === 'poultry')
+    if (tab === 'meat') return catalogProducts.filter((p) => p.category !== 'poultry')
+    return catalogProducts
+  }, [tab])
 
   const trust = useMemo(
     () => [
@@ -31,25 +26,13 @@ export function ProductsPage() {
     [],
   )
 
-  const add = (p: CatalogProduct) => {
-    const kg = selectedWeight[p.id] ?? 0.5
-    addProduct({
-      productId: p.id,
-      name: p.name,
-      image: p.image,
-      imageAlt: p.imageAlt,
-      weightKg: kg,
-      pricePerKg: p.pricePerKg,
-    })
-  }
-
   return (
     <>
       <div className="mx-auto max-w-7xl px-6 py-12">
         <header className="relative mb-10 overflow-hidden rounded-3xl bg-gradient-to-l from-zinc-900 via-zinc-800 to-zinc-900 p-8 text-right text-white md:p-12">
           <div className="absolute -top-10 -left-10 h-36 w-36 rounded-full bg-primary/40 blur-3xl" />
           <div className="relative z-10">
-            <h1 className="mb-4 text-3xl font-black md:text-4xl">قائمة اللحوم الفاخرة</h1>
+            <h1 className="mb-4 text-3xl font-black md:text-4xl">قائمة المنتجات</h1>
             <p className="max-w-2xl text-sm text-zinc-200 md:text-base">
               اختر من منتجات طازجة يوميًا، مع عرض حديث وسريع للطلبات بأفضل تجربة بصرية.
             </p>
@@ -71,73 +54,72 @@ export function ProductsPage() {
           </div>
         </header>
 
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 rounded-2xl border border-zinc-200 bg-white p-1">
+            <button
+              type="button"
+              onClick={() => setTab('all')}
+              className={[
+                'rounded-2xl px-4 py-2 text-sm font-bold transition',
+                tab === 'all' ? 'bg-primary text-white' : 'text-zinc-600 hover:text-zinc-900',
+              ].join(' ')}
+            >
+              الكل
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('meat')}
+              className={[
+                'rounded-2xl px-4 py-2 text-sm font-bold transition',
+                tab === 'meat'
+                  ? 'bg-primary text-white'
+                  : 'text-zinc-600 hover:text-zinc-900',
+              ].join(' ')}
+            >
+              اللحوم
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('poultry')}
+              className={[
+                'rounded-2xl px-4 py-2 text-sm font-bold transition',
+                tab === 'poultry'
+                  ? 'bg-primary text-white'
+                  : 'text-zinc-600 hover:text-zinc-900',
+              ].join(' ')}
+            >
+              الدواجن
+            </button>
+          </div>
+          <div className="text-sm text-zinc-500">
+            عدد المنتجات: <span className="font-bold text-zinc-900">{filteredProducts.length}</span>
+          </div>
+        </div>
+
         <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {catalogProducts.map((p) => {
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {filteredProducts.map((p) => {
               const kg = selectedWeight[p.id] ?? 0.5
               return (
-                <article
+                <ProductCard
                   key={p.id}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                >
-                  <div className="relative aspect-square overflow-hidden bg-zinc-100">
-                    <img
-                      src={p.image}
-                      alt={p.imageAlt}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    {p.badge ? (
-                      <span className="absolute top-4 left-4 rounded-full bg-primary px-2 py-1 text-[10px] font-bold text-white">
-                        {p.badge}
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="flex flex-1 flex-col p-5 text-center">
-                    <h3 className="mb-1 text-lg font-bold text-on-background md:text-xl">{p.name}</h3>
-                    <p className="mb-4 text-xs text-secondary md:text-sm">{p.description}</p>
-                    <div className="mb-5 text-xl font-semibold text-primary">
-                      {formatEgp(p.pricePerKg)}{' '}
-                      <span className="text-sm font-normal text-on-background">/ كيلو</span>
-                    </div>
-                    <div className="mb-5 flex flex-wrap justify-center gap-2">
-                      {weightOptionsKg.map((w) => (
-                        <button
-                          key={w}
-                          type="button"
-                          onClick={() =>
-                            setSelectedWeight((prev) => ({ ...prev, [p.id]: w }))
-                          }
-                          className={
-                            kg === w
-                              ? 'rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white'
-                              : 'rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold transition-colors hover:border-primary'
-                          }
-                        >
-                          {weightLabel(w)}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="mt-auto flex items-center justify-center gap-3">
-                      <a
-                        href={whatsappHref}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white transition-transform hover:scale-105"
-                        aria-label="اطلب عبر واتساب"
-                      >
-                        <WhatsAppIcon className="h-5 w-5" />
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => add(p)}
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white transition-transform hover:scale-105"
-                        aria-label="أضف للسلة"
-                      >
-                        <Icon name="add_shopping_cart" />
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                  product={p}
+                  kg={kg}
+                  onKgChange={(w) =>
+                    setSelectedWeight((prev) => ({ ...prev, [p.id]: w }))
+                  }
+                  onAdd={() =>
+                    addToCart({
+                      productId: p.id,
+                      name: p.name,
+                      image: p.image,
+                      imageAlt: p.imageAlt,
+                      weightKg: kg,
+                      pricePerKg: p.pricePerKg,
+                    })
+                  }
+                  className="p-3 sm:p-3"
+                />
               )
             })}
           </div>

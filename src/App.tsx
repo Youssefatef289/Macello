@@ -1,10 +1,10 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { CartProvider } from './context/CartContext'
 import { Layout } from './components/layout/Layout'
-import { CartPage } from './pages/CartPage'
 import { HomePage } from './pages/HomePage'
 import { OrderConfirmationPage } from './pages/OrderConfirmationPage'
 import { ProductsPage } from './pages/ProductsPage'
+import { CartPage } from './pages/CartPage'
+import { CartProvider } from './context/CartContext'
 
 export default function App() {
   return (

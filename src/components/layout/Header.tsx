@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { navItems } from '../../data/navigation'
-import { useCart } from '../../context/CartContext'
 import { Icon } from '../ui/Icon'
 import { WhatsAppIcon } from '../ui/WhatsAppIcon'
 import { whatsappHref } from '../../data/site'
+import { useCart } from '../../context/CartContext'
 
 export function Header() {
-  const { cartCount } = useCart()
+  const { cartCount, openCart } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
@@ -27,6 +27,11 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [isHome])
 
+  const onCartClick = () => {
+    setMenuOpen(false)
+    openCart()
+  }
+
   return (
     <header
       className={
@@ -35,7 +40,7 @@ export function Header() {
           : 'sticky top-0 z-40 border-b border-zinc-200 bg-white'
       }
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         <Link
           to="/"
           className="flex shrink-0 items-center transition-opacity hover:opacity-90"
@@ -44,7 +49,7 @@ export function Header() {
           <img
             src={logoSrc}
             alt="ماتشيللو"
-            className="h-20 w-60 max-w-[300px] object-cover"
+            className="h-14 w-44 max-w-[176px] object-cover sm:h-20 sm:w-60 sm:max-w-[300px]"
             width={200}
             height={100}
             onError={(e) => {
@@ -98,24 +103,27 @@ export function Header() {
            
           
           </div>
-          <Link
-            to="/cart"
+          <button
+            type="button"
+            onClick={onCartClick}
             className={[
               'relative p-2 transition-colors',
-              isHomeTransparent ? 'text-white/90 hover:text-white' : 'text-zinc-700 hover:text-primary',
+              isHomeTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-zinc-700 hover:text-primary',
             ].join(' ')}
             aria-label="سلة المشتريات"
           >
             <Icon name="shopping_cart" />
-            <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-on-primary">
+            <span className="absolute top-0 right-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-on-primary">
               {cartCount}
             </span>
-          </Link>
+          </button>
           <a
             href={whatsappHref}
             target="_blank"
             rel="noreferrer"
-            className="md:hidden rounded-full bg-green-600 p-2 text-white"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-md shadow-black/20 ring-1 ring-white/30 md:hidden"
             aria-label="واتساب"
           >
             <WhatsAppIcon className="h-5 w-5" />

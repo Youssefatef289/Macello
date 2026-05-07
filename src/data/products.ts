@@ -6,10 +6,15 @@ export type CatalogProduct = {
   image: string
   imageAlt: string
   badge?: string
+  category?: 'meat' | 'poultry'
 }
 
 function meatImage(fileName: string) {
   return `/img/meat/${encodeURIComponent(fileName)}`
+}
+
+function chickImage(fileName: string) {
+  return `/img/chick/${encodeURIComponent(fileName)}`
 }
 
 export const heroImage = meatImage('لحم بقرى مكعبات.webp')
@@ -248,9 +253,174 @@ export const catalogProducts: CatalogProduct[] = [
     image: meatImage('ممبار محشى بالارز.webp'),
     imageAlt: 'ممبار محشى بالارز',
   },
+  {
+    id: 'chick-wings',
+    category: 'poultry',
+    name: 'اجنحه دجاج طازجه',
+    description: 'مناسبة للشوي والفرن والقلي',
+    pricePerKg: 210,
+    image: chickImage('اجنحه دجاج طازجه.webp'),
+    imageAlt: 'اجنحه دجاج طازجه',
+  },
+  {
+    id: 'rabbit-fresh',
+    category: 'poultry',
+    name: 'ارانب طازجه',
+    description: 'تجهيز نظيف للطهي والفرن',
+    pricePerKg: 390,
+    image: chickImage('ارانب طازجه.webp'),
+    imageAlt: 'ارانب طازجه',
+  },
+  {
+    id: 'duck-legs',
+    category: 'poultry',
+    name: 'اوراك بط طازجه',
+    description: 'مثالية للفرن والطهي البطيء',
+    pricePerKg: 320,
+    image: chickImage('اوراك بط طازجه.webp'),
+    imageAlt: 'اوراك بط طازجه',
+  },
+  {
+    id: 'chick-legs',
+    category: 'poultry',
+    name: 'اوراك دجاج طازجة',
+    description: 'طازجة يومياً للتسوية السريعة',
+    pricePerKg: 240,
+    image: chickImage('اوراك دجاج طازجة.webp'),
+    imageAlt: 'اوراك دجاج طازجة',
+  },
+  {
+    id: 'turkey-legs',
+    category: 'poultry',
+    name: 'اوراك رومى طازج',
+    description: 'مناسبة للفرن والتتبيلات',
+    pricePerKg: 340,
+    image: chickImage('اوراك رومى طازج.webp'),
+    imageAlt: 'اوراك رومى طازج',
+  },
+  {
+    id: 'duck-white-whole',
+    category: 'poultry',
+    name: 'بط ابيض كامل طازج',
+    description: 'كامل للتسوية في الفرن',
+    pricePerKg: 300,
+    image: chickImage('بط ابيض كامل طازج.webp'),
+    imageAlt: 'بط ابيض كامل طازج',
+  },
+  {
+    id: 'drumsticks',
+    category: 'poultry',
+    name: 'دبوس دجاج طازج',
+    description: 'مناسب للشوي والقلي',
+    pricePerKg: 235,
+    image: chickImage('دبوس دجاج طازج.webp'),
+    imageAlt: 'دبوس دجاج طازج',
+  },
+  {
+    id: 'balady-chick-whole',
+    category: 'poultry',
+    name: 'دجاج بلدى كامل طازج',
+    description: 'طعم بلدي أصيل',
+    pricePerKg: 320,
+    image: chickImage('دجاج بلدى كامل طازج.webp'),
+    imageAlt: 'دجاج بلدى كامل طازج',
+  },
+  {
+    id: 'chick-whole',
+    category: 'poultry',
+    name: 'دجاج كامل طازج',
+    description: 'كامل للتسوية حسب الطلب',
+    pricePerKg: 280,
+    image: chickImage('دجاج كامل طازج.webp'),
+    imageAlt: 'دجاج كامل طازج',
+  },
+  {
+    id: 'turkey-whole',
+    category: 'poultry',
+    name: 'ديك رومى كامل طازج',
+    description: 'كامل للفرن والمناسبات',
+    pricePerKg: 360,
+    image: chickImage('ديك رومى كامل طازج.webp'),
+    imageAlt: 'ديك رومى كامل طازج',
+  },
+  {
+    id: 'quail',
+    category: 'poultry',
+    name: 'سمان',
+    description: 'طازج للشوي والفرن',
+    pricePerKg: 310,
+    image: chickImage('سمان.webp'),
+    imageAlt: 'سمان',
+  },
+  {
+    id: 'shish-tawook',
+    category: 'poultry',
+    name: 'شيش طاووق طازج',
+    description: 'جاهز للتتبيل والشوي',
+    pricePerKg: 290,
+    image: chickImage('شيش طاووق طازج.webp'),
+    imageAlt: 'شيش طاووق طازج',
+  },
+  {
+    id: 'duck-breast',
+    category: 'poultry',
+    name: 'صدور بط طازجه',
+    description: 'قطعة ممتازة للفرن',
+    pricePerKg: 350,
+    image: chickImage('صدور بط طازجه.webp'),
+    imageAlt: 'صدور بط طازجه',
+  },
+  {
+    id: 'chick-breast-bone',
+    category: 'poultry',
+    name: 'صدور دجاج بالعظم طازجه',
+    description: 'للشوي والطهي',
+    pricePerKg: 260,
+    image: chickImage('صدور دجاج بالعظم طازجه.webp'),
+    imageAlt: 'صدور دجاج بالعظم طازجه',
+  },
+  {
+    id: 'chick-fillet',
+    category: 'poultry',
+    name: 'فيليه دجاج طازج',
+    description: 'مناسب للدايت والوصفات السريعة',
+    pricePerKg: 320,
+    image: chickImage('فيليه دجاج طازج.webp'),
+    imageAlt: 'فيليه دجاج طازج',
+  },
+  {
+    id: 'turkey-fillet',
+    category: 'poultry',
+    name: 'فيليه رومى طازج',
+    description: 'قطعة نظيفة عالية البروتين',
+    pricePerKg: 360,
+    image: chickImage('فيليه رومى طازج.webp'),
+    imageAlt: 'فيليه رومى طازج',
+  },
+  {
+    id: 'gizzards',
+    category: 'poultry',
+    name: 'قوانص دجاج طازجه',
+    description: 'مناسبة للطهي والسندوتشات',
+    pricePerKg: 210,
+    image: chickImage('قوانص دجاج طازجه.webp'),
+    imageAlt: 'قوانص دجاج طازجه',
+  },
+  {
+    id: 'chick-liver',
+    category: 'poultry',
+    name: 'كبده دجاج طازجه',
+    description: 'طازجة للطهي السريع',
+    pricePerKg: 230,
+    image: chickImage('كبده دجاج طازجه.webp'),
+    imageAlt: 'كبده دجاج طازجه',
+  },
 ]
 
 export const featuredProducts: CatalogProduct[] = catalogProducts.slice(0, 4)
+export const poultryProducts: CatalogProduct[] = catalogProducts.filter(
+  (p) => p.category === 'poultry',
+)
 
 export const weightOptionsKg = [0.25, 0.5, 1] as const
 

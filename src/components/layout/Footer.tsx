@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom'
-import { locationHref, locationLabel, phoneDisplay, phoneHref, whatsappHref } from '../../data/site'
+import {
+  facebookHref,
+  locationHref,
+  locationLabel,
+  phoneDisplay,
+  phoneHref,
+  whatsappHref,
+} from '../../data/site'
 
 export function Footer() {
   return (
@@ -15,23 +22,15 @@ export function Footer() {
               height={100}
             />
             <div className="flex items-center gap-2">
-              {(
-                [
-                  { href: '#', src: '/img/icons/Facebook.svg', label: 'فيسبوك' },
-                  { href: '#', src: '/img/icons/Instagram.svg', label: 'إنستغرام' },
-                  { href: '#', src: '/img/icons/Twitter.svg', label: 'تويتر' },
-                  { href: '#', src: '/img/icons/Youtube.svg', label: 'يوتيوب' },
-                ] as const
-              ).map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  className="opacity-80 transition-opacity hover:opacity-100"
-                  aria-label={s.label}
-                >
-                  <img src={s.src} alt="" className="h-9 w-9" width={36} height={36} />
-                </a>
-              ))}
+              <a
+                href={facebookHref}
+                target="_blank"
+                rel="noreferrer"
+                className="opacity-80 transition-opacity hover:opacity-100"
+                aria-label="فيسبوك"
+              >
+                <img src="/img/icons/Facebook.svg" alt="" className="h-9 w-9" width={36} height={36} />
+              </a>
             </div>
           </div>
           <p className="text-sm leading-relaxed font-light text-zinc-500">

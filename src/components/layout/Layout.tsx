@@ -2,6 +2,9 @@ import { Outlet } from 'react-router-dom'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { WhatsAppFab } from './WhatsAppFab'
+import { CartDrawer } from '../cart/CartDrawer'
+import { CartToast } from '../cart/CartToast'
+import { FixedContactButtons } from './FixedContactButtons'
 
 export function Layout() {
   return (
@@ -11,7 +14,10 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <CartDrawer />
+      <CartToast />
       <WhatsAppFab />
+      <FixedContactButtons />
     </div>
   )
 }

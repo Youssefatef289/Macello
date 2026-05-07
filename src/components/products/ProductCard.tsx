@@ -1,0 +1,100 @@
+import type { CatalogProduct } from '../../data/products'
+import { formatEgp, weightOptionsKg } from '../../data/products'
+import { WhatsAppIcon } from '../ui/WhatsAppIcon'
+import { Icon } from '../ui/Icon'
+import { whatsappHref } from '../../data/site'
+
+function weightLabel(kg: number) {
+  if (kg === 0.25) return '١/٤ كيلو'
+  if (kg === 0.5) return '١/٢ كيلو'
+  return '١ كيلو'
+}
+
+type Props = {
+  product: CatalogProduct
+  kg: number
+  onKgChange: (kg: number) => void
+  onAdd: () => void
+  className?: string
+}
+
+export function ProductCard({ product, kg, onKgChange, onAdd, className }: Props) {
+  const linePrice = Math.round(product.pricePerKg * kg)
+
+  return (
+    <article
+      className={[
+        'group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white p-3 transition-all duration-300 hover:-translate-y-1 hover:border-zinc-300 sm:p-4',
+        className ?? '',
+      ].join(' ')}
+    >
+      {product.badge ? (
+        <span className="absolute right-4 top-4 z-10 rounded-full bg-primary px-2 py-1 text-[10px] font-bold text-white">
+          {product.badge}
+        </span>
+      ) : null}
+
+      <div className="relative aspect-square overflow-hidden rounded-2xl bg-zinc-50">
+        <img
+          src={product.image}
+          alt={product.imageAlt}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+      </div>
+
+      <div className="mt-3 flex items-center justify-between">
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noreferrer"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-green-600 text-white shadow-lg shadow-black/10 transition-transform hover:scale-105"
+          aria-label="واتساب"
+          title="واتساب"
+        >
+          <WhatsAppIcon className="h-6 w-6" />
+        </a>
+        <button
+          type="button"
+          onClick={onAdd}
+          className="flex h-11 w-11 items-center justify-center rounded-2xl  text-black shadow-black/10 transition-transform hover:scale-105"
+          aria-label="أضف للسلة"
+          title="أضف للسلة"
+        >
+          <Icon name="shopping_cart" className="text-[22px]" />
+        </button>
+      </div>
+
+      <div className="mt-5 text-right">
+        <h3 className="mb-1 truncate text-base font-bold text-zinc-900">
+          {product.name}
+        </h3>
+        <p className="mb-3 truncate text-xs text-secondary">{product.description}</p>
+
+        <div className="mb-3 text-xl font-semibold text-primary">
+          {formatEgp(linePrice)}{' '}
+          <span className="text-sm font-normal text-on-background">/ تقدير</span>
+        </div>
+
+        <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
+          {weightOptionsKg.map((w) => (
+            <button
+              key={w}
+              type="button"
+              onClick={() => onKgChange(w)}
+              className={[
+                'rounded-full border px-3 py-1 text-[11px] font-semibold transition',
+                kg === w
+                  ? 'border-primary bg-primary text-white'
+                  : 'border-zinc-200 bg-white text-zinc-700 hover:border-primary hover:text-primary',
+              ].join(' ')}
+            >
+              {weightLabel(w)}
+            </button>
+          ))}
+        </div>
+
+      </div>
+    </article>
+  )
+}
+

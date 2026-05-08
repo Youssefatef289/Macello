@@ -3,7 +3,7 @@ import { whatsappHref } from '../../data/site'
 
 export function WhatsAppFab() {
   return (
-    <div className="pointer-events-none fixed bottom-8 left-8 z-50">
+    <div className="pointer-events-none fixed bottom-8 left-8 z-50 hidden md:block">
       <a
         href={whatsappHref}
         target="_blank"

@@ -3,7 +3,7 @@ import { facebookHref, phoneHref } from '../../data/site'
 
 export function FixedContactButtons() {
   return (
-    <div className="fixed right-4 bottom-6 z-[70] flex flex-col gap-3 sm:right-6 sm:bottom-8">
+    <div className="fixed right-4 bottom-6 z-[70] hidden flex-col gap-3 md:flex md:right-6 md:bottom-8">
       <a
         href={phoneHref}
         className="group flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-black/25 transition-transform hover:scale-110"

@@ -5,12 +5,13 @@ import { WhatsAppFab } from './WhatsAppFab'
 import { CartDrawer } from '../cart/CartDrawer'
 import { CartToast } from '../cart/CartToast'
 import { FixedContactButtons } from './FixedContactButtons'
+import { MobileBottomNav } from './MobileBottomNav'
 
 export function Layout() {
   return (
     <div className="relative min-h-dvh flex flex-col">
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 pb-24 md:pb-0">
         <Outlet />
       </main>
       <Footer />
@@ -18,6 +19,7 @@ export function Layout() {
       <CartToast />
       <WhatsAppFab />
       <FixedContactButtons />
+      <MobileBottomNav />
     </div>
   )
 }

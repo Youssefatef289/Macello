@@ -27,11 +27,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [isHome])
 
-  const onCartClick = () => {
-    setMenuOpen(false)
-    openCart()
-  }
-
   return (
     <header
       className={
@@ -98,36 +93,29 @@ export function Header() {
           )}
         </nav>
 
-        <div className="flex items-center gap-4">
-          <div className="relative hidden sm:block">
-           
-          
+        <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 md:flex">
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-md shadow-black/20 transition-transform hover:scale-105"
+              aria-label="واتساب"
+            >
+              <WhatsAppIcon className="h-5 w-5" />
+            </a>
+            <button
+              type="button"
+              onClick={openCart}
+              className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-black/20 transition-transform hover:scale-105"
+              aria-label="سلة المشتريات"
+            >
+              <Icon name="shopping_cart" />
+              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-white px-1 text-[10px] font-bold text-primary">
+                {cartCount}
+              </span>
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onCartClick}
-            className={[
-              'relative p-2 transition-colors',
-              isHomeTransparent
-                ? 'text-white/90 hover:text-white'
-                : 'text-zinc-700 hover:text-primary',
-            ].join(' ')}
-            aria-label="سلة المشتريات"
-          >
-            <Icon name="shopping_cart" />
-            <span className="absolute top-0 right-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] text-on-primary">
-              {cartCount}
-            </span>
-          </button>
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-white shadow-md shadow-black/20 ring-1 ring-white/30 md:hidden"
-            aria-label="واتساب"
-          >
-            <WhatsAppIcon className="h-5 w-5" />
-          </a>
           <button
             type="button"
             className={[

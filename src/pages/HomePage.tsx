@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import { featuredProducts, heroImage, poultryProducts } from '../data/products'
 import { Icon } from '../components/ui/Icon'
-import { WhatsAppIcon } from '../components/ui/WhatsAppIcon'
 import { useState } from 'react'
-import { locationHref, phoneDisplay, phoneHref, whatsappHref } from '../data/site'
+import { whatsappHref } from '../data/site'
 import { useCart } from '../context/CartContext'
 import { ProductCard } from '../components/products/ProductCard'
 import { RevealOnScroll } from '../components/animation/RevealOnScroll'
@@ -107,7 +106,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16">
+      <section id="about-us" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-16">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="order-2 text-right lg:order-1">
             <span className="mb-3 inline-block rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-primary">
@@ -298,40 +297,47 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <div className="rounded-3xl bg-gradient-to-l from-zinc-900 via-zinc-800 to-zinc-900 p-10 text-white shadow-2xl">
-            <h2 className="mb-4 text-3xl font-black md:text-4xl">جاهز للطلب الآن؟</h2>
-            <p className="mb-8 text-zinc-300">
-              تواصل معنا مباشرة عبر واتساب أو اتصال هاتفي، أو افتح اللوكيشن للوصول إلينا.
-            </p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-7 py-4 font-bold text-white transition-transform hover:scale-105"
-              >
-                <WhatsAppIcon className="h-5 w-5" />
-                اطلب عبر واتساب
-              </a>
-              <a
-                href={phoneHref}
-                className="flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-4 font-bold text-zinc-900 transition-transform hover:scale-105"
-              >
-                <Icon name="call" />
-                {phoneDisplay}
-              </a>
-              <a
-                href={locationHref}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/30 px-7 py-4 font-bold text-white transition-colors hover:bg-white/10"
-              >
-                <Icon name="location_on" />
-                اللوكيشن
-              </a>
-            </div>
+      <section className="bg-zinc-50 py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-10 text-center">
+            <h2 className="mb-2 text-3xl font-black text-zinc-900">آراء العملاء</h2>
+            <p className="text-zinc-500">تقييمات حقيقية من عملائنا عن الجودة والخدمة</p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              {
+                name: 'أحمد خالد',
+                review:
+                  'الجودة ممتازة واللحمة طازجة جدًا، والتوصيل كان سريع وفي معاده بالضبط.',
+              },
+              {
+                name: 'سارة محمد',
+                review:
+                  'تغليف نظيف جدًا وتعامل محترم، وطلبت أكثر من مرة وكل مرة نفس المستوى.',
+              },
+              {
+                name: 'محمود علي',
+                review:
+                  'أفضل جزارة جربتها في بني سويف، الأسعار واضحة والخدمة ممتازة.',
+              },
+            ].map((item, index) => (
+              <RevealOnScroll key={item.name} delayMs={index * 90} y={18}>
+                <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-right shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <div className="mb-4 flex items-center justify-end gap-1 text-amber-500">
+                    {Array.from({ length: 5 }).map((_, starIndex) => (
+                      <Icon key={`${item.name}-${starIndex}`} name="star" filled />
+                    ))}
+                  </div>
+                  <p className="mb-4 leading-7 text-zinc-600">{item.review}</p>
+                  <div className="flex items-center justify-end gap-2">
+                    <span className="font-bold text-zinc-900">{item.name}</span>
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Icon name="person" />
+                    </span>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            ))}
           </div>
         </div>
       </section>

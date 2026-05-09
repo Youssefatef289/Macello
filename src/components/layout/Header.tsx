@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { navItems } from '../../data/navigation'
 import { Icon } from '../ui/Icon'
 import { WhatsAppIcon } from '../ui/WhatsAppIcon'
@@ -11,6 +11,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
   const isHome = location.pathname === '/'
   const isHomeTransparent = isHome && !isScrolled
   const logoSrc = `${import.meta.env.BASE_URL}img/${isHomeTransparent ? 'logo-white.png' : 'logo-black.png'}`
@@ -26,6 +27,28 @@ export function Header() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [isHome])
+
+  useEffect(() => {
+    if (location.pathname !== '/' || !location.hash) return
+    const sectionId = location.hash.replace('#', '')
+    const target = document.getElementById(sectionId)
+    if (!target) return
+    requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }, [location.pathname, location.hash])
+
+  const goToSection = (sectionHash: string) => {
+    setMenuOpen(false)
+    const sectionId = sectionHash.replace('#', '')
+    if (location.pathname === '/') {
+      const target = document.getElementById(sectionId)
+      if (!target) return
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      return
+    }
+    navigate(`/${sectionHash}`)
+  }
 
   return (
     <header
@@ -60,6 +83,10 @@ export function Header() {
               <a
                 key={item.label}
                 href={item.to}
+                onClick={(event) => {
+                  event.preventDefault()
+                  goToSection(item.to)
+                }}
                 className={[
                   'text-right text-base transition-colors',
                   isHomeTransparent
@@ -143,6 +170,10 @@ export function Header() {
                 <a
                   key={item.label}
                   href={item.to}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    goToSection(item.to)
+                  }}
                   className={isHomeTransparent ? 'text-white/85' : 'text-zinc-600'}
                 >
                   {item.label}

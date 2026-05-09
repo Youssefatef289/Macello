@@ -1,4 +1,5 @@
 export const whatsappNumber = '201122997992'
+export const whatsappDisplay = '+20 11 22997992'
 export const phoneDisplay = '+20 11 22997992'
 export const phoneHref = 'tel:+201122997992'
 export const whatsappHref = `https://wa.me/${whatsappNumber}`

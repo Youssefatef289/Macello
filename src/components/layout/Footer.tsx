@@ -10,13 +10,16 @@ import {
 } from '../../data/site'
 
 export function Footer() {
+  const footerLogoSrc = `${import.meta.env.BASE_URL}img/logo-white.png`
+  const facebookIconSrc = `${import.meta.env.BASE_URL}img/icons/Facebook.svg`
+
   return (
     <footer id="contact-us" className="mt-20 scroll-mt-24 border-t border-red-900/40 bg-gradient-to-b from-[#7a0f19] via-[#5f0d15] to-[#3f0a10] text-right text-red-50">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-12 md:grid-cols-3 md:px-8">
         <div>
           <div className="mb-6 flex flex-wrap items-center gap-4">
             <img
-              src="/img/logo_-_white-removebg-preview.png"
+              src={footerLogoSrc}
               alt="ماتشيللو"
               className="h-30 w-100 max-w-[300px] object-cover drop-shadow-[0_8px_20px_rgba(0,0,0,0.45)]"
               width={300}
@@ -30,7 +33,7 @@ export function Footer() {
                 className="rounded-full bg-white/15 p-1.5 opacity-90 transition hover:bg-white/25 hover:opacity-100"
                 aria-label="فيسبوك"
               >
-                <img src="/img/icons/Facebook.svg" alt="" className="h-9 w-9" width={36} height={36} />
+                <img src={facebookIconSrc} alt="" className="h-9 w-9" width={36} height={36} />
               </a>
             </div>
           </div>

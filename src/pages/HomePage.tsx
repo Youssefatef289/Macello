@@ -9,7 +9,7 @@ import { ProductCard } from '../components/products/ProductCard'
 import { RevealOnScroll } from '../components/animation/RevealOnScroll'
 
 export function HomePage() {
-  const { addToCart, openCart } = useCart()
+  const { addToCart } = useCart()
   const [weights, setWeights] = useState<Record<string, number>>(() =>
     Object.fromEntries(featuredProducts.map((p) => [p.id, 0.5])),
   )
@@ -172,8 +172,7 @@ export function HomePage() {
                   kg={w}
                   compactOnMobile
                   onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
-                  onAdd={() =>
-                    {
+                  onAdd={() => {
                       addToCart({
                         productId: p.id,
                         name: p.name,
@@ -182,9 +181,7 @@ export function HomePage() {
                         weightKg: w,
                         pricePerKg: p.pricePerKg,
                       })
-                      openCart()
-                    }
-                  }
+                    }}
                 />
               </RevealOnScroll>
             )
@@ -219,8 +216,7 @@ export function HomePage() {
                   onKgChange={(kg) =>
                     setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
                   }
-                  onAdd={() =>
-                    {
+                  onAdd={() => {
                       addToCart({
                         productId: p.id,
                         name: p.name,
@@ -229,9 +225,7 @@ export function HomePage() {
                         weightKg: w,
                         pricePerKg: p.pricePerKg,
                       })
-                      openCart()
-                    }
-                  }
+                    }}
                 />
               </RevealOnScroll>
             )

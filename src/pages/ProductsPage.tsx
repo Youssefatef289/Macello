@@ -6,7 +6,7 @@ import { ProductCard } from '../components/products/ProductCard'
 import { RevealOnScroll } from '../components/animation/RevealOnScroll'
 
 export function ProductsPage() {
-  const { addToCart, openCart } = useCart()
+  const { addToCart } = useCart()
   const [tab, setTab] = useState<'all' | 'meat' | 'poultry'>(() => 'all')
   const [selectedWeight, setSelectedWeight] = useState<Record<string, number>>(
     () => Object.fromEntries(catalogProducts.map((p) => [p.id, 0.5])),
@@ -109,8 +109,7 @@ export function ProductsPage() {
                     onKgChange={(w) =>
                       setSelectedWeight((prev) => ({ ...prev, [p.id]: w }))
                     }
-                    onAdd={() =>
-                    {
+                    onAdd={() => {
                       addToCart({
                         productId: p.id,
                         name: p.name,
@@ -119,9 +118,7 @@ export function ProductsPage() {
                         weightKg: kg,
                         pricePerKg: p.pricePerKg,
                       })
-                      openCart()
-                    }
-                    }
+                    }}
                     className="p-3 sm:p-3"
                   />
                 </RevealOnScroll>

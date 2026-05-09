@@ -163,7 +163,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       ]
     })
     setToastMessage(`تمت إضافة ${input.name} إلى السلة`)
-    setIsCartOpen(true)
   }, [])
 
   const increaseQty = useCallback((id: string) => {

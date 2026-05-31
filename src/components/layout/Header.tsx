@@ -134,6 +134,7 @@ export function Header() {
             <button
               type="button"
               onClick={openCart}
+              data-cart-target="true"
               className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-black/20 transition-transform hover:scale-105"
               aria-label="سلة المشتريات"
             >
@@ -203,4 +204,3 @@ export function Header() {
     </header>
   )
 }
-

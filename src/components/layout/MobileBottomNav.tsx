@@ -36,6 +36,7 @@ export function MobileBottomNav() {
         <button
           type="button"
           onClick={openCart}
+          data-cart-target="true"
           className={itemClass(false)}
           aria-label="السلة"
         >
@@ -51,4 +52,3 @@ export function MobileBottomNav() {
     </nav>
   )
 }
-

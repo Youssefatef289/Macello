@@ -6,6 +6,7 @@ import { CartDrawer } from '../cart/CartDrawer'
 import { CartToast } from '../cart/CartToast'
 import { FixedContactButtons } from './FixedContactButtons'
 import { MobileBottomNav } from './MobileBottomNav'
+import { ScrollToTopFab } from './ScrollToTopFab'
 
 export function Layout() {
   return (
@@ -19,6 +20,7 @@ export function Layout() {
       <CartToast />
       <WhatsAppFab />
       <FixedContactButtons />
+      <ScrollToTopFab />
       <MobileBottomNav />
     </div>
   )

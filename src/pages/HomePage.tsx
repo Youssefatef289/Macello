@@ -1,11 +1,55 @@
 import { Link } from 'react-router-dom'
 import { featuredProducts, heroImage, poultryProducts } from '../data/products'
 import { Icon } from '../components/ui/Icon'
-import { useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { whatsappHref } from '../data/site'
 import { useCart } from '../context/CartContext'
 import { ProductCard } from '../components/products/ProductCard'
 import { RevealOnScroll } from '../components/animation/RevealOnScroll'
+
+function MobileAutoSlider<T>({
+  items,
+  renderItem,
+}: {
+  items: T[]
+  renderItem: (item: T, index: number) => ReactNode
+}) {
+  const trackRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track || items.length < 2) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const advance = () => {
+      const maxScrollLeft = track.scrollWidth - track.clientWidth - 4
+      const nextScrollLeft =
+        track.scrollLeft >= maxScrollLeft
+          ? 0
+          : Math.min(track.scrollLeft + track.clientWidth * 0.92, maxScrollLeft)
+
+      track.scrollTo({ left: nextScrollLeft, behavior: 'smooth' })
+    }
+
+    const intervalId = window.setInterval(advance, 2800)
+    return () => window.clearInterval(intervalId)
+  }, [items.length])
+
+  return (
+    <div className="md:hidden">
+      <div
+        ref={trackRef}
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {items.map((item, index) => (
+          <div key={index} className="w-[86%] shrink-0 snap-center">
+            {renderItem(item, index)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function HomePage() {
   const { addToCart } = useCart()
@@ -161,17 +205,43 @@ export function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-          {featuredProducts.map((p, index) => {
-            const w = weights[p.id] ?? 0.5
-            return (
-              <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+        <div className="min-w-0">
+          <MobileAutoSlider
+            items={featuredProducts}
+            renderItem={(p) => {
+              const w = weights[p.id] ?? 0.5
+              return (
                 <ProductCard
                   product={p}
                   kg={w}
                   compactOnMobile
                   onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
                   onAdd={() => {
+                    addToCart({
+                      productId: p.id,
+                      name: p.name,
+                      image: p.image,
+                      imageAlt: p.imageAlt,
+                      weightKg: w,
+                      pricePerKg: p.pricePerKg,
+                    })
+                  }}
+                />
+              )
+            }}
+          />
+
+          <div className="hidden grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 md:grid lg:grid-cols-4 lg:gap-6">
+            {featuredProducts.map((p, index) => {
+              const w = weights[p.id] ?? 0.5
+              return (
+                <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+                  <ProductCard
+                    product={p}
+                    kg={w}
+                    compactOnMobile
+                    onKgChange={(kg) => setWeights((prev) => ({ ...prev, [p.id]: kg }))}
+                    onAdd={() => {
                       addToCart({
                         productId: p.id,
                         name: p.name,
@@ -181,10 +251,11 @@ export function HomePage() {
                         pricePerKg: p.pricePerKg,
                       })
                     }}
-                />
-              </RevealOnScroll>
-            )
-          })}
+                  />
+                </RevealOnScroll>
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -203,11 +274,12 @@ export function HomePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
-          {poultry.map((p, index) => {
-            const w = poultryWeights[p.id] ?? 0.5
-            return (
-              <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+        <div className="min-w-0">
+          <MobileAutoSlider
+            items={poultry}
+            renderItem={(p) => {
+              const w = poultryWeights[p.id] ?? 0.5
+              return (
                 <ProductCard
                   product={p}
                   kg={w}
@@ -216,6 +288,33 @@ export function HomePage() {
                     setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
                   }
                   onAdd={() => {
+                    addToCart({
+                      productId: p.id,
+                      name: p.name,
+                      image: p.image,
+                      imageAlt: p.imageAlt,
+                      weightKg: w,
+                      pricePerKg: p.pricePerKg,
+                    })
+                  }}
+                />
+              )
+            }}
+          />
+
+          <div className="hidden grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 md:grid lg:grid-cols-4 lg:gap-6">
+            {poultry.map((p, index) => {
+              const w = poultryWeights[p.id] ?? 0.5
+              return (
+                <RevealOnScroll key={p.id} delayMs={Math.min(index * 70, 250)}>
+                  <ProductCard
+                    product={p}
+                    kg={w}
+                    compactOnMobile
+                    onKgChange={(kg) =>
+                      setPoultryWeights((prev) => ({ ...prev, [p.id]: kg }))
+                    }
+                    onAdd={() => {
                       addToCart({
                         productId: p.id,
                         name: p.name,
@@ -225,10 +324,11 @@ export function HomePage() {
                         pricePerKg: p.pricePerKg,
                       })
                     }}
-                />
-              </RevealOnScroll>
-            )
-          })}
+                  />
+                </RevealOnScroll>
+              )
+            })}
+          </div>
         </div>
       </section>
 

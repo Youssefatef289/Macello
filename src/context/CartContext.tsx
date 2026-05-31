@@ -37,6 +37,7 @@ type CartContextValue = {
   subtotalEgp: number
   isCartOpen: boolean
   toastMessage: string | null
+  orderNotes: string
   openCart: () => void
   closeCart: () => void
   addToCart: (input: AddToCartInput) => void
@@ -44,6 +45,7 @@ type CartContextValue = {
   decreaseQty: (id: string) => void
   removeItem: (id: string) => void
   clearCart: () => void
+  setOrderNotes: (notes: string) => void
 }
 
 const CartContext = createContext<CartContextValue | null>(null)
@@ -119,6 +121,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(readStoredItems)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [orderNotes, setOrderNotes] = useState<string>('')
 
   useEffect(() => {
     try {
@@ -189,7 +192,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }, [])
 
-  const clearCart = useCallback(() => setItems([]), [])
+  const clearCart = useCallback(() => {
+    setItems([])
+    setOrderNotes('')
+  }, [])
+
+  const setOrderNotesHandler = useCallback((notes: string) => {
+    setOrderNotes(notes)
+  }, [])
 
   const subtotalEgp = useMemo(
     () => items.reduce((sum, item) => sum + item.unitPriceEgp * item.quantity, 0),
@@ -208,6 +218,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotalEgp,
       isCartOpen,
       toastMessage,
+      orderNotes,
       openCart,
       closeCart,
       addToCart,
@@ -215,6 +226,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decreaseQty,
       removeItem,
       clearCart,
+      setOrderNotes: setOrderNotesHandler,
     }),
     [
       items,
@@ -222,6 +234,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotalEgp,
       isCartOpen,
       toastMessage,
+      orderNotes,
       openCart,
       closeCart,
       addToCart,
@@ -229,6 +242,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decreaseQty,
       removeItem,
       clearCart,
+      setOrderNotesHandler,
     ],
   )
 

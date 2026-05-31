@@ -98,7 +98,7 @@ export function ProductsPage() {
         </div>
 
         <div className="min-w-0">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {filteredProducts.map((p, index) => {
               const kg = selectedWeight[p.id] ?? 0.5
               return (
@@ -119,7 +119,6 @@ export function ProductsPage() {
                         pricePerKg: p.pricePerKg,
                       })
                     }}
-                    className="p-3 sm:p-3"
                   />
                 </RevealOnScroll>
               )
@@ -146,4 +145,3 @@ export function ProductsPage() {
     </>
   )
 }
-

@@ -25,6 +25,8 @@ export function CartDrawer() {
     removeItem,
     clearCart,
     cartCount,
+    orderNotes,
+    setOrderNotes,
   } = useCart()
 
   useEffect(() => {
@@ -52,6 +54,7 @@ export function CartDrawer() {
     ),
     '',
     `إجمالي الطلب: ${subtotalEgp} EGP`,
+    ...(orderNotes ? ['', 'ملاحظات الطلب:', orderNotes] : []),
   ].join('\n')
 
   const whatsappOrderLink = `${whatsappHref}?text=${encodeURIComponent(whatsappText)}`
@@ -195,6 +198,21 @@ export function CartDrawer() {
             <span className="text-zinc-600">الإجمالي</span>
             <span className="text-xl font-black text-primary">{formatEgp(subtotalEgp)}</span>
           </div>
+
+          {items.length > 0 && (
+            <div className="mb-4">
+              <label className="mb-2 block text-sm font-semibold text-zinc-700">
+                ملاحظاتك على الطلب (اختياري)
+              </label>
+              <textarea
+                value={orderNotes}
+                onChange={(e) => setOrderNotes(e.target.value)}
+                placeholder="مثال: بدون توابل، تقطيع ناعم، إلخ..."
+                className="w-full rounded-lg border border-zinc-200 bg-white/50 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                rows={3}
+              />
+            </div>
+          )}
 
           <a
             href={items.length > 0 ? whatsappOrderLink : undefined}

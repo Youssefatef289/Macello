@@ -18,15 +18,17 @@ export function CartPage() {
     items,
     subtotalEgp,
     cartCount,
+    orderNotes,
     increaseQty,
     decreaseQty,
     removeItem,
     clearCart,
+    setOrderNotes,
   } = useCart()
   const navigate = useNavigate()
 
   const whatsappText = [
-    'مرحباً، أريد طلب المنتجات التالية:',
+    'مرحبًا، أريد طلب المنتجات التالية:',
     '',
     ...items.map(
       (item) =>
@@ -34,6 +36,7 @@ export function CartPage() {
     ),
     '',
     `إجمالي الطلب: ${subtotalEgp} EGP`,
+    ...(orderNotes ? ['', 'ملاحظات الطلب:', orderNotes] : []),
   ].join('\n')
 
   const whatsappOrderLink = `${whatsappHref}?text=${encodeURIComponent(whatsappText)}`
@@ -54,9 +57,9 @@ export function CartPage() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-zinc-200 text-zinc-600">
             <Icon name="shopping_cart" />
           </div>
-          <p className="mb-2 text-lg font-bold text-zinc-800">السلة فارغة حالياً</p>
+          <p className="mb-2 text-lg font-bold text-zinc-800">السلة فارغة حاليًا</p>
           <p className="mb-6 text-sm text-zinc-500">
-            أضف منتجاتك أولاً وسيظهر ملخص الطلب هنا.
+            أضف منتجاتك أولًا وسيظهر ملخص الطلب هنا.
           </p>
           <Link
             to="/products"
@@ -165,6 +168,25 @@ export function CartPage() {
                   {formatEgp(subtotalEgp)}
                 </span>
               </div>
+            </div>
+
+            <div className="mb-6 text-right">
+              <label
+                htmlFor="order-notes"
+                className="mb-2 block text-sm font-semibold text-zinc-700"
+              >
+                ملاحظاتك على الطلب
+              </label>
+              <textarea
+                id="order-notes"
+                value={orderNotes}
+                onChange={(event) => setOrderNotes(event.target.value)}
+                placeholder="مثال: بدون توابل، تقطيع ناعم، وقت تواصل مناسب، أو أي ملاحظة تحب نرسلها مع الطلب."
+                className="min-h-28 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 transition focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/15"
+              />
+              <p className="mt-2 text-xs text-zinc-500">
+                سيتم إرسال هذه الملاحظات تلقائيًا في رسالة الواتساب مع تفاصيل الطلب.
+              </p>
             </div>
 
             <div className="space-y-3">

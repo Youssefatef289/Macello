@@ -8,7 +8,11 @@ export function CartToast() {
 
   return createPortal(
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[210] flex justify-center px-4">
-      <div className="flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-3 text-sm font-medium text-white shadow-xl">
+      <div
+        className="flex items-center gap-2 rounded-xl bg-zinc-900 px-4 py-3 text-sm font-medium text-white shadow-xl animate-[toastIn_.28s_ease-out_forwards]"
+        role="status"
+        aria-live="polite"
+      >
         <Icon name="check_circle" className="text-emerald-400" />
         <span>{toastMessage}</span>
       </div>
